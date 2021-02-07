@@ -211,7 +211,7 @@ selec 函数名(实参列表) from 表名;
 	select length('john');  		-- 4个字节
 	select length('张三丰哈哈哈');	-- 取决于字符集，utf-8 一个汉字占两个字节，一个字母占一个字节
 	-- concat()	拼接字符串
-  select 	concat(last_name,'-',fist_name) from t;
+  select concat(last_name,'-',fist_name) from t;
 	-- upper(),lower()	大写，小写
 	select upper('john');	-- JOHN
 	-- substr(str,pos)	
