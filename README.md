@@ -4,9 +4,9 @@
 ```
 DB:DataBase（存储数据的仓库）
 DBMS：DataBase Management System  常见的：mysql，oracle，db2等
-	DBMS分两类：
-		1、基于共享文件系统的DBMS（Access）
-		2、基于C/S架构的--需要安装客户端和服务端（Mysql，oracle，sqlserver）
+DBMS分两类：
+  1、基于共享文件系统的DBMS（Access）
+  2、基于C/S架构的--需要安装客户端和服务端（Mysql，oracle，sqlserver）
 sql：structure query language
 ```
 
@@ -55,52 +55,52 @@ select version();
 语法
 ```mysql
 select 查询列表 from 表名;
-	-- 1、查询列表可以是：表中字段、常量值、表达式、函数
-	-- 2、查询的结果是一个虚拟表格
+  -- 1、查询列表可以是：表中字段、常量值、表达式、函数
+  -- 2、查询的结果是一个虚拟表格
 	
 -- 查询表中单个字段
-	select 字段名 from 表名;
+  select 字段名 from 表名;
 -- 查询表中多个字段
-	select 字段名1，字段名2，字段名3 from 表名;
+  select 字段名1，字段名2，字段名3 from 表名;
 -- 查询表中所有字段
-	select * from 表名;
+  select * from 表名;
 -- 查询常量值(字符型和日期型的常量值必须用单引号扩起来，数值型常量不需要)
-	select 100;
-	select 'John';
+  select 100;
+  select 'John';
 -- 查询表达式
-	select 100*98;
+  select 100*98;
 -- 查询函数
-	select 函数名(实参列表);
+  select 函数名(实参列表);
 -- 起别名
-		-- 方式1（使用AS）:给100*98的结果起别名为‘结果’
-		select 100*98 AS 结果;	
-		-- 方式2（使用空格）
-		select 100*98 结果;	
-		-- 案例：查询salary，显示结果为out put
-				select salary AS "out put"; 		 -- 若别名中有特殊符号，需要对别名加上""
+  -- 方式1（使用AS）:给100*98的结果起别名为‘结果’
+    select 100*98 AS 结果;	
+  -- 方式2（使用空格）
+    select 100*98 结果;	
+  -- 案例：查询salary，显示结果为out put
+    select salary AS "out put"; 		 -- 若别名中有特殊符号，需要对别名加上""
 -- 去重（distinct）
-	select distinct 字段名 from 表名;
+  select distinct 字段名 from 表名;
 -- +号的作用（mysql中+号只有充当运算符功能）
-		-- 1）两个操作数都是数值型 （select 100+98）
-		-- 2）其中一个为字符型，试图将字符型转换成数值型;
-			 	-- 若转换成功，则继续做加法运算	
-			 			select ‘123’+90;
-				--  若转换失败，则将字符型转换成0 
-						select ‘john’+90;
-				--  若其中一方为null，结果肯定为null 
-						select null +30;
-		-- 3)将字段进行拼接的函数-concat（字段1,字段2,..字段n）
-				-- 案例：查询员工名和姓连接成一个字段，并显示为姓名
-						select concat(last_name,first_name) AS 姓名 from employees;
-				-- 案例：显示出表employee的全部列，各个列之间用逗号连接，列头显示成out_put
-						select ifnull (commission_pct,0) AS 奖金率 from employees;
-						select concat(first_name,last_name,job_id,ifnull (commission_pct,0)) AS out_put from employees;
-        -- null和任何字段拼接都是null(commission_pct字段值为null)
+  -- 1）两个操作数都是数值型 （select 100+98）	
+  -- 2）其中一个为字符型，试图将字符型转换成数值型;
+  -- 若转换成功，则继续做加法运算
+    select ‘123’+90;
+  --  若转换失败，则将字符型转换成0 
+    select ‘john’+90;
+  --  若其中一方为null，结果肯定为null 
+    select null +30;
+  -- 3)将字段进行拼接的函数-concat（字段1,字段2,..字段n）
+  -- 案例：查询员工名和姓连接成一个字段，并显示为姓名
+	select concat(last_name,first_name) AS 姓名 from employees;
+  -- 案例：显示出表employee的全部列，各个列之间用逗号连接，列头显示成out_put
+	select ifnull (commission_pct,0) AS 奖金率 from employees;
+	select concat(first_name,last_name,job_id,ifnull (commission_pct,0)) AS out_put from employees;
+   	-- null和任何字段拼接都是null(commission_pct字段值为null)
         -- ifnull(字段名，返回值):判断字段/表达式是否为空，若为空，可以按返回值返回
 			
 -- 注：
-		-- 1、区分字段和关键字，可以对字段加上着重号`		`column`
-	 	-- 2、sql不区分字符和字符串，都用''
+  -- 1、区分字段和关键字，可以对字段加上着重号`		`column`
+  -- 2、sql不区分字符和字符串，都用''
 ```
 
 ### 条件查询
@@ -108,28 +108,28 @@ select 查询列表 from 表名;
 ```sql
 select 查询列表 from 表名 where 筛选条件；
 -- 筛选条件：
-	-- 1、条件表达式	 > < = != <> >= <=
-	-- 2、逻辑表达式  $$ || ! and or not
-	-- 3、模糊查询		like 	between and 	in	is null
-		--like特点
-			-- 一般和通配符搭配使用
-		-- 通配符
-			-- % 任意多个字符，包含0个字符
-			-- - 任意单个字符
-		-- between and
-			-- 包含临界值
-			-- 临界值不能颠倒（>=左边 <=右边）
-		-- in 
-			-- 用于判断某字段的值是否属于in列表中的某一项
-			-- in列表的值类型必须一致或者兼容
-			-- in列表里面不支持通配符
-		-- is null / is not null
-			-- = < > 不能用于判断null值
-			-- is null /is not null 可以判断null值
-		-- 安全等于 <=>
-			-- 可以判断null值
-			-- 可以判断普通数值
-			-- 可读性差
+  -- 1、条件表达式	 > < = != <> >= <=
+  -- 2、逻辑表达式  $$ || ! and or not
+  -- 3、模糊查询		like 	between and 	in	is null
+    --like特点
+	-- 一般和通配符搭配使用
+	-- 通配符
+          -- % 任意多个字符，包含0个字符
+  	  -- - 任意单个字符
+    -- between and
+	-- 包含临界值
+	-- 临界值不能颠倒（>=左边 <=右边）
+    -- in 
+	-- 用于判断某字段的值是否属于in列表中的某一项
+	-- in列表的值类型必须一致或者兼容
+	-- in列表里面不支持通配符
+    -- is null / is not null
+	-- = < > 不能用于判断null值
+	-- is null /is not null 可以判断null值
+    -- 安全等于 <=>
+	-- 可以判断null值
+	-- 可以判断普通数值
+	-- 可读性差
 		
 ```
 
