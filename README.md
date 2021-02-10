@@ -1,12 +1,13 @@
 
 
 ## 概念
+
 ```
 DB:DataBase（存储数据的仓库）
 DBMS：DataBase Management System  常见的：mysql，oracle，db2等
-DBMS分两类：
-  1、基于共享文件系统的DBMS（Access）
-  2、基于C/S架构的--需要安装客户端和服务端（Mysql，oracle，sqlserver）
+	DBMS分两类：
+		1、基于共享文件系统的DBMS（Access）
+		2、基于C/S架构的--需要安装客户端和服务端（Mysql，oracle，sqlserver）
 sql：structure query language
 ```
 
@@ -37,6 +38,7 @@ select version();
 ```
 
 ### 注释
+
 ```mysql
 # 单行注释
 
@@ -52,88 +54,93 @@ select version();
 ## DQL（Data Query Language）
 
 ### 基础查询
+
 语法
+
 ```mysql
 select 查询列表 from 表名;
-  -- 1、查询列表可以是：表中字段、常量值、表达式、函数
-  -- 2、查询的结果是一个虚拟表格
+	-- 1、查询列表可以是：表中字段、常量值、表达式、函数
+	-- 2、查询的结果是一个虚拟表格
 	
 -- 查询表中单个字段
-  select 字段名 from 表名;
+	select 字段名 from 表名;
 -- 查询表中多个字段
-  select 字段名1，字段名2，字段名3 from 表名;
+	select 字段名1，字段名2，字段名3 from 表名;
 -- 查询表中所有字段
-  select * from 表名;
+	select * from 表名;
 -- 查询常量值(字符型和日期型的常量值必须用单引号扩起来，数值型常量不需要)
-  select 100;
-  select 'John';
+	select 100;
+	select 'John';
 -- 查询表达式
-  select 100*98;
+	select 100*98;
 -- 查询函数
-  select 函数名(实参列表);
+	select 函数名(实参列表);
 -- 起别名
-  -- 方式1（使用AS）:给100*98的结果起别名为‘结果’
-    select 100*98 AS 结果;	
-  -- 方式2（使用空格）
-    select 100*98 结果;	
-  -- 案例：查询salary，显示结果为out put
-    select salary AS "out put"; 		 -- 若别名中有特殊符号，需要对别名加上""
+		-- 方式1（使用AS）:给100*98的结果起别名为‘结果’
+		select 100*98 AS 结果;	
+		-- 方式2（使用空格）
+		select 100*98 结果;	
+		-- 案例：查询salary，显示结果为out put
+				select salary AS "out put"; 		 -- 若别名中有特殊符号，需要对别名加上""
 -- 去重（distinct）
-  select distinct 字段名 from 表名;
+	select distinct 字段名 from 表名;
 -- +号的作用（mysql中+号只有充当运算符功能）
-  -- 1）两个操作数都是数值型 （select 100+98）	
-  -- 2）其中一个为字符型，试图将字符型转换成数值型;
-  -- 若转换成功，则继续做加法运算
-    select ‘123’+90;
-  --  若转换失败，则将字符型转换成0 
-    select ‘john’+90;
-  --  若其中一方为null，结果肯定为null 
-    select null +30;
-  -- 3)将字段进行拼接的函数-concat（字段1,字段2,..字段n）
-  -- 案例：查询员工名和姓连接成一个字段，并显示为姓名
-	select concat(last_name,first_name) AS 姓名 from employees;
-  -- 案例：显示出表employee的全部列，各个列之间用逗号连接，列头显示成out_put
-	select ifnull (commission_pct,0) AS 奖金率 from employees;
-	select concat(first_name,last_name,job_id,ifnull (commission_pct,0)) AS out_put from employees;
-   	-- null和任何字段拼接都是null(commission_pct字段值为null)
+		-- 1）两个操作数都是数值型 （select 100+98）
+		-- 2）其中一个为字符型，试图将字符型转换成数值型;
+			 	-- 若转换成功，则继续做加法运算	
+			 			select ‘123’+90;
+				--  若转换失败，则将字符型转换成0 
+						select ‘john’+90;
+				--  若其中一方为null，结果肯定为null 
+						select null +30;
+		-- 3)将字段进行拼接的函数-concat（字段1,字段2,..字段n）
+				-- 案例：查询员工名和姓连接成一个字段，并显示为姓名
+						select concat(last_name,first_name) AS 姓名 from employees;
+				-- 案例：显示出表employee的全部列，各个列之间用逗号连接，列头显示成out_put
+						select ifnull (commission_pct,0) AS 奖金率 from employees;
+						select concat(first_name,last_name,job_id,ifnull (commission_pct,0)) AS out_put from employees;
+        -- null和任何字段拼接都是null(commission_pct字段值为null)
         -- ifnull(字段名，返回值):判断字段/表达式是否为空，若为空，可以按返回值返回
 			
 -- 注：
-  -- 1、区分字段和关键字，可以对字段加上着重号`		`column`
-  -- 2、sql不区分字符和字符串，都用''
+		-- 1、区分字段和关键字，可以对字段加上着重号`		`column`
+	 	-- 2、sql不区分字符和字符串，都用''
 ```
 
 ### 条件查询
+
 语法
+
 ```sql
 select 查询列表 from 表名 where 筛选条件；
 -- 筛选条件：
-  -- 1、条件表达式	 > < = != <> >= <=
-  -- 2、逻辑表达式  $$ || ! and or not
-  -- 3、模糊查询		like 	between and 	in	is null
-    --like特点
-	-- 一般和通配符搭配使用
-	-- 通配符
-          -- % 任意多个字符，包含0个字符
-  	  -- - 任意单个字符
-    -- between and
-	-- 包含临界值
-	-- 临界值不能颠倒（>=左边 <=右边）
-    -- in 
-	-- 用于判断某字段的值是否属于in列表中的某一项
-	-- in列表的值类型必须一致或者兼容
-	-- in列表里面不支持通配符
-    -- is null / is not null
-	-- = < > 不能用于判断null值
-	-- is null /is not null 可以判断null值
-    -- 安全等于 <=>
-	-- 可以判断null值
-	-- 可以判断普通数值
-	-- 可读性差
+	-- 1、条件表达式	 > < = != <> >= <=
+	-- 2、逻辑表达式  $$ || ! and or not
+	-- 3、模糊查询		like 	between and 	in	is null
+		--like特点
+			-- 一般和通配符搭配使用
+		-- 通配符
+			-- % 任意多个字符，包含0个字符
+			-- - 任意单个字符
+		-- between and
+			-- 包含临界值
+			-- 临界值不能颠倒（>=左边 <=右边）
+		-- in 
+			-- 用于判断某字段的值是否属于in列表中的某一项
+			-- in列表的值类型必须一致或者兼容
+			-- in列表里面不支持通配符
+		-- is null / is not null
+			-- = < > 不能用于判断null值
+			-- is null /is not null 可以判断null值
+		-- 安全等于 <=>
+			-- 可以判断null值
+			-- 可以判断普通数值
+			-- 可读性差
 		
 ```
 
 实例
+
 ```mysql
 -- 查询员工工资大于12000
 	select * from employees where salary >12000;
@@ -173,7 +180,9 @@ select 查询列表 from 表名 where 筛选条件；
 ```
 
 ### 排序查询
+
 语法
+
 ```mysql
 -- 升序｜降序
 select 查询列表 from 表 where 筛选条件 order by 排序列表 asc｜desc
@@ -181,7 +190,9 @@ select 查询列表 from 表 where 筛选条件 order by 排序列表 asc｜desc
 	-- order by后可以支持单个字段，多个字段，表达式，函数，别名
 	-- order by 一般放在查询语句的最后面，limit子句除外 
 ```
+
 案例
+
 ```mysql
 -- 查询员工信息，要求工资从高到低排序
 select * from employees order by salary desc;
@@ -197,21 +208,26 @@ select * from t order by salary asc,employee_id desc;
 -- 查询邮箱中包含e的员工信息，并按邮箱的字节数降序，再按部门号升序
 select *,length(email) from t where email like '%e%' order by length(email) desc,dep_id asc;
 ```
+
 ### 常见函数
+
 语法
+
 ```mysql
 selec 函数名(实参列表) from 表名;
 -- 分类
 	-- 单行函数 concat(),length(),ifnull()		有一个返回值
 	-- 分组函数/统计函数/聚合函数/组函数		做统计使用
 ```
+
 #### 字符函数
+
 ```mysql
 	-- length()	获取字节个数
 	select length('john');  		-- 4个字节
 	select length('张三丰哈哈哈');	-- 取决于字符集，utf-8 一个汉字占两个字节，一个字母占一个字节
 	-- concat()	拼接字符串
-  select concat(last_name,'-',fist_name) from t;
+  select 	concat(last_name,'-',fist_name) from t;
 	-- upper(),lower()	大写，小写
 	select upper('john');	-- JOHN
 	-- substr(str,pos)	
@@ -230,7 +246,9 @@ selec 函数名(实参列表) from 表名;
 	-- replace()	替换
 	select replace('周芷若周芷若张无忌爱上周芷若','周芷若','赵敏') as output;	-- 张无忌爱上赵敏
 ```
+
 #### 数学函数
+
 ```mysql
 -- round()	四舍五入
 select round(1.65);		-- 2
@@ -243,7 +261,9 @@ select truncate(1.69999,1);		-- 1.6	小数点后保存1位
 -- mod()	取余
 -- rand()	获取随机数，返回的是0-1之间的小数
 ```
+
 #### 日期函数
+
 ```mysql
 -- now()	返回当前日期和时间
 select now();
@@ -259,6 +279,7 @@ select datediff(now(),1994-05-09);
 ```
 
 #### 其他函数
+
 ```mysql
 -- 查询版本号
 select version();
@@ -271,7 +292,9 @@ select password('aaaa');
 select md5('aaaaa');
 
 ```
+
 #### 流程控制函数
+
 ```mysql
 -- if(expr1,expr2,expr3):expr1为true将返回expr2的值，反之返回expr3
 select if(10>5,small,big);
@@ -298,6 +321,7 @@ select if(10>5,small,big);
 ```
 
 案例
+
 ```mysql
 -- 将姓大写，名小写，然后拼接
 		select 	concat((upper(last_name),'-',lower(fist_name))from t;
@@ -337,7 +361,9 @@ select if(10>5,small,big);
 ```
 
 ### 分组函数
+
 语法
+
 ```mysql
 -- sum():求和	一个参数
 select sum(salary) from t;
@@ -363,7 +389,9 @@ select avg(salary),dep_id from t;	-- 没有意义
 	-- max(),min()	支持任何类型	忽略null值		可以和distnct搭配使用
 	-- count()			支持任何类型	仅对非空数值计数	可以和distnct搭配使用
 ```
+
 案例
+
 ```mysql
 -- 查询员工表中的最大入职时间和最小入职时间的相差天数
 select datediff(max(hiredate) min(hiredate))	相差天数	from t;
@@ -372,7 +400,9 @@ select count(*) from t where t.dep_id=90;
 ```
 
 ### 分组查询
+
 语法
+
 ```mysql
 select 分组函数，列（要求出现在group by后面） from 表 where 筛选条件 group by 分组列表 order by 子句;
 -- 分组前筛选	查询列表比较特殊，要求是分组函数和group by后面的字段
@@ -382,7 +412,9 @@ select 分组函数，列（要求出现在group by后面） from 表 where 筛�
 -- 能用分组前筛选，优先使用分组前筛选
 -- group by子句支持单个字段分组，也支持多个字段分组（字段间没有顺序要求）
 ```
+
 案例
+
 ```mysql
 -- 查询每个工种的最高工资
 select max(salary),job_id from t group by job_id;
@@ -417,8 +449,11 @@ select min(salary),manage_id from t where manage_id is not null group by manage_
 ```
 
 ### 连接查询
+
 #### 内连接（写法1）
+
 语法
+
 ```mysql
 -- 多表连接，当查询字段来自多个表时，就会用到连接查询
 select	name,boyname from boys t1,beauty t2 where t1.id=t2.boyname;
@@ -435,7 +470,9 @@ select	name,boyname from boys t1,beauty t2 where t1.id=t2.boyname;
 	-- 查询员工名和其上级名(employees看成是两张表，两张表进行连接)
 	select e.last_name,empolyee_id,l.lastname,manage_id from employees e,employees l where e.employee_id=l.manage_id;
 ```
+
 案例
+
 ```mysql
 -- 查询工种号，员工名，工种名
 select last_name,t1.job_id,job_title from jobs t1,employees t2 where t1.job_id=t2.job_id;
@@ -452,12 +489,17 @@ select  dep_name,manage_id,min(salary) from employees t1,department t2 where t1.
 -- 查询每个国家下的部门个数大于2的国家编号
 select country_id ,count(*) 部门个数 from locations l,departments d where l.loc_id=d.loc_id group by country_id having count(*)>2;
 ```
+
 #### 内连接（写法2）
+
 ```mysql
 select 查询列表 from 表1 连接类型 join 表2 on 连接条件 where 筛选条件 group by 分组 having 筛选条件 order by;
 -- 连接类型	inner
+-- 交集
 ```
+
 案例
+
 ```mysql
 -- 查询员工名、部门名
 select last_name,dep_name from employees e inner join department d on e.dep_id=d.dep_id;
@@ -473,34 +515,59 @@ from employees e
 inner join department d on e.dep_id=d.dep_id
 inner join jobs j on e.job.id=j.job_id 
 order by dep_name desc;
+-- 查询员工的工资级别
+select salary,grade_level from employees e join job_grade g on e.salary between g.lowest_sal and g.highest_sal;
+-- 查询每个工资级别个数>2的个数，并且工资级别降序排列
+select count(*) from employees e join job_grade g on e.salary between g.lowest_sal and g.highest_sal group by grade_level having count(*) > 2 order by grade_level desc;
+-- 查询员工的名字、上级的名字
+select e.last_name 员工名字,l.last_name 上级名字 from employees e inner join employees l on e.manage_id=l.employee_id;
 ```
 
 #### 外连接
+
 语法
+
 ```mysql
 select 查询列表 from 表1 连接类型 join 表2 on 连接条件 where 筛选条件 group by 分组 having 筛选条件 order by;
 -- 左外连接	left [outer]
+  -- left左边的是主表 查询主表中所有记录
 -- 右外连接	right [outer]
+  -- left右边是主表  查询主表中所有记录
 -- 全外连接	full outer
--- 交叉连接	cross
+-- 交叉连接	cross 
+  -- 注：一般用于查询一张表中有，另一张表中没有的记录
+  -- 特点：
+    -- 外连接查询结果是主表中的所有记录；如果从表中有和它匹配的，则显示匹配的值；如果从表中没有和它匹配的，则显示       null；外连接的查询结果=内连接结果+主表中有而从表中没有的记录。
+    -- 左外和右外交换两个表的顺序，可以实现同样的效果
+    -- 全外连接=内连接+表1中有但表2中没有+表2中有表1没有
+    -- 交叉连接，笛卡尔乘积
 ```
-案例
-```mysql
 
+案例
+
+```mysql
+-- 查询没有男朋友的女生名
+select b.name,bo.name from beauty b left outer join boys bo on b.boyfriend_id=bo.id where bo.id is not null;
+select b.name,bo.name from boys bo right outer join beauty b on b.boyfriend_id=bo.id where bo.id is not null;
+-- 查询哪个部门没有员工
+select e.employee_id,d.* from departments d left outer join employees e on e.dep_id=d.dep_id where e.employee_id is null;
 ```
 
 
 ### 子查询
+
 ```mysql
 
 ```
 
 ### 分页查询
+
 ```mysql
 
 ```
 
 ### union联合查询
+
 ```mysql
 
 ```
